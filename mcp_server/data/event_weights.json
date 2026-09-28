@@ -1,0 +1,8 @@
+{
+  "guidance": 1.0,
+  "partnership": 0.8,
+  "acquisition": 1.0,
+  "litigation": -0.8,
+  "fda": 1.0,
+  "recall": -1.0
+}

@@ -1,0 +1,35 @@
+# Python 3.12+ (tested on 3.12)
+#
+# MCP Python SDK v2 (MCPServer API). Ships uvicorn/starlette for the HTTP transport.
+mcp>=2.2,<3
+
+# LLM (Claude Sonnet 5 via the Anthropic SDK)
+anthropic>=1.8,<2
+
+# Core
+pydantic>=2.7
+python-dotenv>=1.0.1
+requests>=2.32
+python-dateutil>=2.9
+pyyaml>=6.0.2
+jinja2>=3.1
+tenacity>=9.0
+diskcache>=5.6
+APScheduler>=3.10,<4
+
+# Data / analytics
+# pandas 3 is blocked by pykrx / FinanceDataReader / ta / yfinance upper bounds.
+pandas>=2.2,<3
+numpy>=1.26
+yfinance>=0.2.54
+feedparser>=6.0.11
+vaderSentiment>=3.3.2
+ta>=0.11
+
+# Korean market
+pykrx>=1.0
+finance-datareader>=0.9.90
+
+# Charts
+matplotlib>=3.9
+plotly>=5.20

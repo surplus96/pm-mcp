@@ -1,0 +1,18 @@
+{
+  "tickers": [
+    "AAPL",
+    "MSFT",
+    "GOOGL",
+    "NVDA",
+    "AMZN",
+    "META",
+    "TSLA"
+  ],
+  "themes": [
+    "AI",
+    "semiconductor",
+    "renewable energy",
+    "biotech"
+  ],
+  "updated": "2026-01-22"
+}

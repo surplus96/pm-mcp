@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "pm-mcp": {
+      "command": "/path/to/PM-MCP/.venv/bin/python",
+      "args": ["-m", "mcp_server.mcp_app"],
+      "env": {
+        "PYTHONPATH": "/path/to/PM-MCP"
+      }
+    }
+  }
+}
