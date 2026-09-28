@@ -77,6 +77,26 @@ def test_check_converts_error_only_results():
     assert check(partial) is partial
 
 
+# ---- cache --------------------------------------------------------------
+
+def test_cache_skips_empty_results(monkeypatch, tmp_path):
+    from mcp_server.tools.cache_manager import CacheManager
+
+    monkeypatch.setattr(CacheManager, "_instance", None)  # singleton: isolate from data/diskcache
+    cm = CacheManager(cache_dir=str(tmp_path))
+    calls = []
+
+    @cm.cached(ttl=60, prefix="t")
+    def fetch(n):
+        calls.append(n)
+        return _ohlcv(n) if n else pd.DataFrame()
+
+    fetch(0); fetch(0)
+    assert calls == [0, 0]  # empty frame is not cached
+    fetch(5); fetch(5)
+    assert calls == [0, 0, 5]  # non-empty frame is cached
+
+
 # ---- market data --------------------------------------------------------
 
 def test_get_prices_accepts_market_and_period(monkeypatch):

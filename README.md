@@ -39,7 +39,10 @@ python3.12 -m venv .venv
 cp .env.example .env   # 없으면 아래 환경 변수를 직접 작성
 ```
 
-- stdio(Claude Code / Desktop): [.mcp.json](.mcp.json) 또는 [mcp_config.sample.json](mcp_config.sample.json)의 경로를 환경에 맞게 수정
+- stdio(Claude Code / Desktop): [mcp_config.sample.json](mcp_config.sample.json)을 복사해 경로를 환경에 맞게 수정하거나(Claude Code는 프로젝트 루트의 `.mcp.json`, git 추적 제외), 다음 명령으로 등록
+  ```bash
+  claude mcp add pm-mcp -e PYTHONPATH=$PWD -- $PWD/.venv/bin/python -m mcp_server.mcp_app
+  ```
 - Streamable HTTP: `scripts/run_mcp_http.sh` → `http://127.0.0.1:8010/mcp`
   - `PM_MCP_TOKEN`을 설정하면 `Authorization: Bearer <token>` 헤더가 필요합니다
   - `HOST`를 loopback 외 주소로 지정하려면 `PM_MCP_TOKEN`과 `ALLOWED_HOSTS`가 필수입니다

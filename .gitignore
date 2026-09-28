@@ -179,3 +179,10 @@ cython_debug/
 #  refer to https://docs.cursor.com/context/ignore-files
 .cursorignore
 .cursorindexingignore
+
+# PM-MCP runtime data (cache, CSVs, saved portfolios, reports); watchlist.json stays tracked
+data/*
+!data/watchlist.json
+
+# Machine-specific MCP client config (copy from mcp_config.sample.json)
+.mcp.json

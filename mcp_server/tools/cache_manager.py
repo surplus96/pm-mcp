@@ -29,6 +29,17 @@ P = ParamSpec("P")
 T = TypeVar("T")
 
 
+def _is_cacheable(value: Any) -> bool:
+    """None·빈 DataFrame/Series·빈 컬렉션은 캐싱하지 않는다."""
+    if value is None:
+        return False
+    if getattr(value, "empty", False) is True:  # pandas DataFrame / Series
+        return False
+    if isinstance(value, (dict, list, tuple, set, str)) and not value:
+        return False
+    return True
+
+
 class TTL:
     """TTL 상수 (초 단위)"""
     REALTIME = 15 * 60          # 15분 - 실시간 가격
@@ -187,9 +198,9 @@ class CacheManager:
                 if cached_value is not None:
                     return cached_value
 
-                # 함수 실행 및 캐싱
+                # 함수 실행 및 캐싱 (빈 결과는 일시 장애일 수 있으므로 캐싱하지 않음)
                 result = func(*args, **kwargs)
-                if result is not None:
+                if _is_cacheable(result):
                     self.set(cache_key, result, ttl)
 
                 return result
