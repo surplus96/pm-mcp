@@ -12,6 +12,12 @@ FINNHUB_API_KEY = os.getenv("FINNHUB_API_KEY")
 # Credentials: ANTHROPIC_API_KEY (read by the Anthropic SDK). Model: CLAUDE_MODEL (see tools/llm.py).
 SEC_EDGAR_USER_AGENT = os.getenv("SEC_EDGAR_USER_AGENT", "")
 
+
+def sec_user_agent() -> str:
+    """User-Agent for SEC EDGAR requests. SEC asks for a real contact ("Name email");
+    set it in SEC_EDGAR_USER_AGENT rather than committing one to the repo."""
+    return os.getenv("SEC_EDGAR_USER_AGENT", "").strip() or "PM-MCP contact@example.com"
+
 DATA_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'data'))
 RAW_PATH = os.path.join(DATA_ROOT, 'raw')
 INTERIM_PATH = os.path.join(DATA_ROOT, 'interim')

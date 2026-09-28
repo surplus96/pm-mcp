@@ -16,9 +16,11 @@ import json
 import logging
 from functools import lru_cache
 from pathlib import Path
-from typing import Any
+from typing import Any, Dict
 
 import requests
+
+from mcp_server.config import sec_user_agent
 
 logger = logging.getLogger(__name__)
 
@@ -28,13 +30,14 @@ CIK_MAP_PATH = Path(__file__).parent.parent / "data" / "sec_cik_map.json"
 
 # SEC requires a User-Agent identifying the caller. They publish the
 # header rule at https://www.sec.gov/os/accessing-edgar-data — failing
-# to set it gets us a 403. Keep the contact e-mail real.
-HTTP_HEADERS = {
-    "User-Agent": "Stock-Manager-MCP/1.0 (contact@example.com)",
-    "Accept-Encoding": "gzip, deflate",
-    "Accept": "application/json",
-    "Host": "data.sec.gov",
-}
+# to set it gets us a 403. The contact comes from SEC_EDGAR_USER_AGENT.
+def _headers() -> Dict[str, str]:
+    return {
+        "User-Agent": sec_user_agent(),
+        "Accept-Encoding": "gzip, deflate",
+        "Accept": "application/json",
+        "Host": "data.sec.gov",
+    }
 
 # XBRL concept names we read. Each list is tried in order — issuers
 # don't all tag identically (NetIncomeLoss vs ProfitLoss for IFRS
@@ -270,7 +273,7 @@ def get_financials(ticker: str, *, timeout: float = 8.0) -> dict[str, Any]:
 
     url = f"{SEC_BASE_URL}/api/xbrl/companyfacts/CIK{cik}.json"
     try:
-        r = requests.get(url, headers=HTTP_HEADERS, timeout=timeout)
+        r = requests.get(url, headers=_headers(), timeout=timeout)
         if r.status_code == 404:
             logger.debug("SEC companyfacts 404 for %s (cik=%s)", ticker, cik)
             return {}
@@ -402,7 +405,7 @@ def get_quarterly_financials(ticker: str, *, timeout: float = 8.0) -> dict[str, 
 
     url = f"{SEC_BASE_URL}/api/xbrl/companyfacts/CIK{cik}.json"
     try:
-        r = requests.get(url, headers=HTTP_HEADERS, timeout=timeout)
+        r = requests.get(url, headers=_headers(), timeout=timeout)
         if r.status_code == 404:
             return {}
         r.raise_for_status()

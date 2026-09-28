@@ -1,7 +1,7 @@
 # pm-mcp 전체 도구 카탈로그 (v2, 도구 25개)
 
 모든 도구는 `mcp__pm-mcp__<이름>` 형태로 호출한다. **굵게**는 필수, `이름(값)`은 기본값, `이름?`은 선택값, `∈`는 허용 값이다.
-이 표는 서버 스키마에서 생성했다.
+아래 표는 `scripts/gen_tool_catalog.py`가 서버 스키마에서 생성한다. 도구를 바꾸면 스크립트를 다시 실행한다.
 
 ## 테마/아이디어 발굴
 | 도구 | 파라미터 | 설명 |
@@ -35,7 +35,7 @@
 | 도구 | 파라미터 | 설명 |
 |---|---|---|
 | `portfolio_analyze` | **holdings_text**, aspect('comprehensive') ∈ comprehensive/pnl/rebalance/dividends/alerts/correlation/sectors, cash(0), target_weights_text?, threshold_pct(5.0), targets_text?, days_ahead(90), period('1y') ∈ 1mo/3mo/6mo/1y/2y/5y | 포트폴리오 분석. |
-| `portfolio_quick_check` | **holdings_text** | 느슨하게 적힌 보유 종목(매수일·매수가 선택)을 받아 페이즈(상승/유지/불안정/적신호), 모멘텀·변동성·낙폭·SPY 상관, |
+| `portfolio_quick_check` | **holdings_text** | 느슨하게 적힌 보유 종목(매수일·매수가 선택)을 받아 페이즈(상승/유지/불안정/적신호), 모멘텀·변동성·낙폭·SPY 상관, 손익, 펀더멘털 점수를 행 데이터와 마크다운 표로 반환합니다. 매수가가 없으면 매수일 종가를 사용합니다. |
 | `portfolio_store` | **action** ∈ save/load/list, name?, holdings_text?, cash(0) | 포트폴리오를 이름으로 저장(save, 같은 이름은 덮어씀)/불러오기(load)/목록(list) 합니다. |
 | `watchlist` | action('get') ∈ get/update, tickers?, themes? | 스케줄러가 추적하는 워치리스트 조회(get) 또는 교체(update: 전달한 목록으로 덮어씀). |
 
@@ -63,6 +63,7 @@
 
 ## 프롬프트
 - `analyze_stock(ticker, market)` · `portfolio_checkup(holdings_text, cash)` · `discover_themes(lookback_days)`
+
 ## v1 → v2 도구 대응표
 | v1 (제거됨) | v2 |
 |---|---|

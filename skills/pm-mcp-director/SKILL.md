@@ -78,7 +78,7 @@ pm-mcp는 시장 데이터·기술적/재무/감성 분석·랭킹·백테스트
 | 포트폴리오 비중 / 섹터 | `chart(kind="allocation" \| "sectors", holdings_text)` |
 | 종합 대시보드 | `chart(kind="dashboard", ticker)` |
 
-차트는 `chart_html`(대시보드는 `charts`)을 반환한다. `save_as`를 지정하면 서버의 `data/charts/`에도 저장된다. 사용자에게 보여줄 때는 HTML을 outputs 폴더에 저장해 전달한다.
+차트는 `chart_html`(대시보드는 `charts`)을 반환한다. `save_as`를 지정하면 서버의 `data/charts/<save_as>.html`에도 저장되고 경로가 `saved_path`(대시보드는 `saved_paths`)로 돌아온다. 사용자에게 보여줄 때는 이 경로를 알려주거나 반환된 HTML을 파일로 저장해 전달한다.
 
 ### 9. 워치리스트·데이터·운영
 - 워치리스트: `watchlist(action="get" | "update", tickers, themes)` (리소스 `pm://watchlist`)
@@ -91,7 +91,10 @@ pm-mcp는 시장 데이터·기술적/재무/감성 분석·랭킹·백테스트
 
 - `stock_snapshot`의 미국 기술 지표는 Alpha Vantage를 쓰며 무료 한도 때문에 호출 사이 대기가 있어 30초 이상 걸릴 수 있다. 빠른 확인은 `stock_factors(sections=["technical"])`를 쓴다(로컬 계산).
 - `finnhub_data`는 FINNHUB_API_KEY가 필요하다.
-- 한국 시세는 PyKrx → KIS → Yahoo 순으로 대체된다. KRX 로그인 설정이 없으면 PyKrx 단계는 건너뛴다.
+- 한국 시세는 PyKrx → KIS Developers → Yahoo(.KS/.KQ) 순으로 대체된다. KIS 단계는 `KIS_APP_KEY`/`KIS_APP_SECRET`이 있을 때만 동작한다.
+- LLM이 필요한 경로(`news_sentiment(use_llm=True)`, `report_create(kind="theme")`의 뉴스 요약)는 `ANTHROPIC_API_KEY`가 필요하다. 키가 없으면 `use_llm=False`(키워드 기반)로 답한다.
+- `filings_recent`는 미국 종목 전용이다(한국 공시 미지원). SEC는 연락처가 담긴 User-Agent를 요구하므로 `SEC_EDGAR_USER_AGENT`가 비어 있으면 임시 값으로 요청하다 차단될 수 있다.
+- 빈 결과는 캐시하지 않는다. 일시적인 "가격 데이터가 없습니다" 오류는 같은 요청을 한 번 더 시도하면 풀릴 수 있다.
 
 ## 응답 형식
 

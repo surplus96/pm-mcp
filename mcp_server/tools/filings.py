@@ -1,8 +1,8 @@
 from __future__ import annotations
 from typing import List, Dict, Optional
-import os
 import logging
 import requests
+from mcp_server.config import sec_user_agent
 from .llm import summarize_items
 from .cache_manager import cache_manager, TTL
 from .resilience import (
@@ -19,14 +19,9 @@ _session = requests.Session()
 _ticker_cache: Dict[str, str] = {}  # 인메모리 캐시 (CIK 매핑용)
 
 
-def _ua() -> str:
-    ua = os.getenv("SEC_EDGAR_USER_AGENT") or "contact@example.com PM-MCP"
-    return ua
-
-
 def _headers() -> Dict[str, str]:
     return {
-        "User-Agent": _ua(),
+        "User-Agent": sec_user_agent(),
         "Accept-Encoding": "gzip, deflate",
     }
 

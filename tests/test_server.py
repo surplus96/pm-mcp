@@ -97,6 +97,18 @@ def test_cache_skips_empty_results(monkeypatch, tmp_path):
     assert calls == [0, 0, 5]  # non-empty frame is cached
 
 
+# ---- SEC User-Agent ------------------------------------------------------
+
+def test_sec_user_agent_comes_from_env(monkeypatch):
+    from mcp_server.tools import filings, sec_edgar_fundamentals
+
+    monkeypatch.setenv("SEC_EDGAR_USER_AGENT", "Tester tester@example.org")
+    assert filings._headers()["User-Agent"] == "Tester tester@example.org"
+    assert sec_edgar_fundamentals._headers()["User-Agent"] == "Tester tester@example.org"
+    monkeypatch.delenv("SEC_EDGAR_USER_AGENT")
+    assert "@" in sec_edgar_fundamentals._headers()["User-Agent"]
+
+
 # ---- market data --------------------------------------------------------
 
 def test_get_prices_accepts_market_and_period(monkeypatch):
